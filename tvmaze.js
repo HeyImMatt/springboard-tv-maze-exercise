@@ -1,22 +1,6 @@
 /** Given a query string, return array of matching shows:
  *     { id, name, summary, episodesUrl }
  */
-
-
-/** Search Shows
- *    - given a search term, search for tv shows that
- *      match that query.  The function is async show it
- *       will be returning a promise.
- *
- *   - Returns an array of objects. Each object should include
- *     following show information:
- *    {
-        id: <show id>,
-        name: <show name>,
-        summary: <show summary>,
-        image: <an image from the show data, or a default imege if no image exists, (image isn't needed until later)>
-      }
- */
 async function searchShows(query) {
   try {
     let res = await axios.get('http://api.tvmaze.com/search/shows', { params: { q: query } });
@@ -35,12 +19,9 @@ async function searchShows(query) {
   }
 }
 
-
-
 /** Populate shows list:
  *     - given list of shows, add shows to DOM
  */
-
 function populateShows(shows) {
   const $showsList = $("#shows-list");
   $showsList.empty();
@@ -62,12 +43,10 @@ function populateShows(shows) {
   }
 }
 
-
 /** Handle search form submission:
  *    - hide episodes area
  *    - get list of matching shows and show in shows list
  */
-
 $("#search-form").on("submit", async function handleSearch (evt) {
   evt.preventDefault();
 
@@ -85,11 +64,22 @@ $("#search-form").on("submit", async function handleSearch (evt) {
 /** Given a show ID, return list of episodes:
  *      { id, name, season, number }
  */
-
 async function getEpisodes(id) {
-  // TODO: get episodes from tvmaze
-  //       you can get this by making GET request to
-  //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
+  try {
+    let res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
+    console.log(res.data)
+    return res.data.map((obj) => {
+      return {
+        id: obj.id,
+        name: obj.name, 
+        season: obj.season,
+        number: obj.number,
+      }
+    })
+  }
+  catch (err) {
+    alert('Oops! Something went wrong. Please try again.')
+    throw new Error(err)
+  }
 
-  // TODO: return array-of-episode-info, as described in docstring above
 }
