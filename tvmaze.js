@@ -43,6 +43,21 @@ function populateShows(shows) {
   }
 }
 
+/* Populate episodes for the show clicked */
+function populateEpisodes(episodes) {
+  const $episodesList = $('#episodes-list');
+
+  $episodesList.empty();
+
+  for (let ep of episodes) {
+    let $episode = $(
+      `<li>${ep.name} (season ${ep.season}, number ${ep.number})</li>`
+    )
+    $episodesList.append($episode)
+  }
+  $('#episodes-area').show();
+}
+
 /** Handle search form submission:
  *    - hide episodes area
  *    - get list of matching shows and show in shows list
