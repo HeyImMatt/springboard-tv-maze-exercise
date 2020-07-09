@@ -34,6 +34,7 @@ function populateShows(shows) {
           <div class="card-body">
             <h5 class="card-title">${show.name}</h5>
             <p class="card-text">${show.summary}</p>
+            <button data-button-id="episodes-btn" class="btn btn-info" type="button">Show Episodes</button>
           </div>
         </div>
       </div>
@@ -75,6 +76,24 @@ $("#search-form").on("submit", async function handleSearch (evt) {
   populateShows(shows);
 });
 
+// Add listener for show episodes
+document.getElementById('shows-list').addEventListener('click', (evt) => {
+  handleShowEpisodes(evt)
+})
+
+/*Handle show episodes button click
+*     - Get list of show's episodes
+      - Uhide episodes area
+*/
+async function handleShowEpisodes(evt) {
+  if (evt.target.dataset.buttonId === 'episodes-btn') {
+    let episodes = await getEpisodes(evt.target.parentElement.parentElement.dataset.showId);
+
+    $("#episodes-area").show();
+
+    populateEpisodes(episodes)
+  }
+}
 
 /** Given a show ID, return list of episodes:
  *      { id, name, season, number }
@@ -82,7 +101,6 @@ $("#search-form").on("submit", async function handleSearch (evt) {
 async function getEpisodes(id) {
   try {
     let res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
-    console.log(res.data)
     return res.data.map((obj) => {
       return {
         id: obj.id,
