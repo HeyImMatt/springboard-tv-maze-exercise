@@ -34,7 +34,7 @@ function populateShows(shows) {
           <div class="card-body">
             <h5 class="card-title">${show.name}</h5>
             <p class="card-text">${show.summary}</p>
-            <button data-button-id="episodes-btn" class="btn btn-info" type="button">Show Episodes</button>
+            <button data-button-id="episodes-btn" class="btn btn-info" type="button" data-toggle="modal" data-target="#episodes-modal">Show Episodes</button>
           </div>
         </div>
       </div>
@@ -56,7 +56,6 @@ function populateEpisodes(episodes) {
     )
     $episodesList.append($episode)
   }
-  $('#episodes-area').show();
 }
 
 /** Handle search form submission:
@@ -88,8 +87,6 @@ document.getElementById('shows-list').addEventListener('click', (evt) => {
 async function handleShowEpisodes(evt) {
   if (evt.target.dataset.buttonId === 'episodes-btn') {
     let episodes = await getEpisodes(evt.target.parentElement.parentElement.dataset.showId);
-
-    $("#episodes-area").show();
 
     populateEpisodes(episodes)
   }
